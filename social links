@@ -1,0 +1,10 @@
+https://www.linkedin.com/in/xolanisibande/?skipRedirect=true
+https://scholar.google.com/citations?user=N4PRIMgAAAAJ&hl=en[About Me](about.qmd){.btn .btn-outline-primary role="button"}
+[Publications](publications.qmd){.btn .btn-outline-primary role="button"}
+[Download CV](CV.pdf){.btn .btn-primary role="button" target="_blank"}
+
+::: {.social-links}
+[{{< fa linkedin size=lg >}} LinkedIn](https://www.linkedin.com/in/xolanisibande/){target="_blank"}
+[{{< ai google-scholar size=lg >}} Google Scholar](https://scholar.google.com/citations?user=N4PRIMgAAAAJ&hl=en){target="_blank"}
+:::
+:::

@@ -1,0 +1,54 @@
+project:
+  type: website
+
+website:
+  title: "Xolani Sibande"
+  favicon: xolani.jpeg
+  site-url: https://xolanisibande.com
+  navbar:
+    pinned: true
+    left:
+      - href: index.qmd
+        text: Home
+      - href: about.qmd
+        text: About
+      - href: publications.qmd
+        text: Publications
+    right:
+      - text: CV
+        href: CV.pdf
+        target: _blank
+      - icon: envelope-fill
+        href: mailto:xolaniss@gmail.com
+        aria-label: Email
+      - icon: linkedin
+        href: https://www.linkedin.com/in/xolanisibande/
+        aria-label: LinkedIn
+      - icon: mortarboard-fill
+        href: https://scholar.google.com/citations?user=N4PRIMgAAAAJ&hl=en
+        aria-label: Google Scholar
+  page-footer:
+    left: "&copy; 2026 Xolani Sibande"
+    right:
+      - icon: envelope-fill
+        href: mailto:xolaniss@gmail.com
+        aria-label: Email
+      - icon: linkedin
+        href: https://www.linkedin.com/in/xolanisibande/
+        aria-label: LinkedIn
+      - icon: mortarboard-fill
+        href: https://scholar.google.com/citations?user=N4PRIMgAAAAJ&hl=en
+        aria-label: Google Scholar
+    background: light
+    border: true
+
+format:
+  html:
+    theme: [cosmo, theme.scss]
+    css: styles.css
+    toc: false
+    grid:
+      body-width: 850px
+    smooth-scroll: true
+
+editor: visual

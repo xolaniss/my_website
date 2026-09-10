@@ -1,0 +1,40 @@
+---
+title: "About"
+---
+
+I am an economist with over a decade of diverse professional experience
+spanning academia, the financial sector, and government. My academic
+background includes a Master's degree in Econometrics (2010), a Master's in
+Public Administration (2016), and a PhD in Economics with a specialization
+in financial markets and econometrics (2020), and I remain actively engaged
+in research, with ongoing publications in international journals.
+
+Early in my career, I worked in the financial sector as a banking sector
+analyst, where my responsibilities included strategy development and
+macroeconomic analysis for banks and financial institutions across Africa.
+As part of collaborative teams, I contributed to projects for major banks in
+Zambia, Uganda, Botswana, South Africa, and other countries.
+
+From there, I moved into government, where I provided macroeconomic analysis
+at the global, national, and provincial levels, directly informing
+provincial policy formulation and budget decisions. This included
+forecasting economic conditions for Gauteng province, managing a small team
+of economists, and reporting on key socio-economic indicators to track
+progress against government priorities.
+
+Today, my work is centered on central bank research, focusing on the impact
+of monetary and macroprudential policies on the broader economy. I
+contribute to the monetary policy process through analysis and advisory
+input, and regularly present my findings at conferences, seminars, and
+workshops. Across these roles, my work has consistently drawn on
+econometrics, macroeconomics, finance, data science, and public policy.
+
+[Download my full CV](CV.pdf){.btn .btn-primary role="button" target="_blank"}
+
+## Contact & Links
+
+::: {.social-links}
+[<i class="bi bi-envelope-fill"></i> Email](mailto:xolaniss@gmail.com)
+[<i class="bi bi-linkedin"></i> LinkedIn](https://www.linkedin.com/in/xolanisibande/){target="_blank"}
+[<i class="bi bi-mortarboard-fill"></i> Google Scholar](https://scholar.google.com/citations?user=N4PRIMgAAAAJ&hl=en){target="_blank"}
+:::

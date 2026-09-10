@@ -1,0 +1,84 @@
+---
+title: "Publications"
+---
+
+A list of my journal articles, books, and reports, organised by year (most recent first).
+
+```{r}
+#| echo: false
+#| results: asis
+#| warning: false
+
+library(bibtex)
+
+clean_title <- function(x) {
+  x <- gsub("\\{\\{|\\}\\}", "", x)
+  x <- gsub("[{}]", "", x)
+  x
+}
+
+format_authors <- function(author) {
+  nms <- vapply(author, function(p) {
+    given <- paste(p$given, collapse = " ")
+    family <- paste(p$family, collapse = " ")
+    full <- trimws(paste(given, family))
+    if (identical(family, "Sibande") && grepl("Xolani", given)) {
+      full <- paste0("**", full, "**")
+    }
+    full
+  }, character(1))
+  if (length(nms) == 1) return(nms)
+  if (length(nms) == 2) return(paste(nms, collapse = " and "))
+  paste0(paste(nms[-length(nms)], collapse = ", "), ", and ", nms[length(nms)])
+}
+
+bib <- unclass(read.bib("my_papers.bib"))
+
+entries <- lapply(bib, function(e) {
+  a <- attributes(e)
+  list(
+    bibtype   = a$bibtype,
+    title     = clean_title(e$title %||% ""),
+    author    = format_authors(e$author),
+    year      = suppressWarnings(as.integer(e$year)),
+    journal   = e$journal,
+    volume    = e$volume,
+    number    = e$number,
+    pages     = e$pages,
+    publisher = if (!is.null(e$publisher)) clean_title(e$publisher) else NULL,
+    doi       = e$doi
+  )
+})
+
+years <- sort(unique(vapply(entries, function(x) x$year, integer(1))), decreasing = TRUE)
+
+for (yr in years) {
+  cat("\n::: {.pub-year}\n", yr, "\n:::\n\n", sep = "")
+  yr_entries <- Filter(function(x) x$year == yr, entries)
+  # Order alphabetically by title within a year
+  yr_entries <- yr_entries[order(vapply(yr_entries, function(x) x$title, character(1)))]
+
+  cat("\n::: {.pub-list}\n\n")
+  for (e in yr_entries) {
+    cat("- ", e$title, ". ", e$author, ". ", sep = "")
+    cat("<span class='pub-venue'>")
+    if (!is.null(e$journal)) {
+      cat("*", e$journal, "*", sep = "")
+      if (!is.null(e$volume)) {
+        cat(", ", e$volume, sep = "")
+        if (!is.null(e$number)) cat("(", e$number, ")", sep = "")
+      }
+      if (!is.null(e$pages)) cat(", ", gsub("--", "-", e$pages), sep = "")
+      cat(". ")
+    } else if (!is.null(e$publisher)) {
+      cat(e$publisher, ". ", sep = "")
+    }
+    cat("</span>")
+    if (!is.null(e$doi)) {
+      cat("[https://doi.org/", e$doi, "](https://doi.org/", e$doi, ")", sep = "")
+    }
+    cat("\n")
+  }
+  cat("\n:::\n")
+}
+```
