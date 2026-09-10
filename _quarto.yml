@@ -4,7 +4,7 @@ project:
 website:
   title: "Xolani Sibande"
   favicon: xolani.jpeg
-  site-url: https://xolanisibande.com
+  site-url: https://xolaniss.github.io/my_website/
   navbar:
     pinned: true
     left:
