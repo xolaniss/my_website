@@ -31,6 +31,11 @@ econometrics, macroeconomics, finance, data science, and public policy.
 
 [Download my full CV](CV.pdf){.btn .btn-primary role="button" target="_blank"}
 
+::: {.disclaimer}
+*The views expressed on this website are my own and do not necessarily
+reflect those of my employer or any affiliated institution.*
+:::
+
 ## Contact & Links
 
 ::: {.social-links}

@@ -102,3 +102,16 @@ main.content h2 {
 .pub-venue {
   color: #45494f;
 }
+
+/* ---------- Disclaimer ---------- */
+
+.disclaimer {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #6b7075;
+}
+
+.nav-footer-center {
+  font-size: 0.85rem;
+  color: #6b7075;
+}

@@ -29,6 +29,7 @@ website:
         aria-label: Google Scholar
   page-footer:
     left: "&copy; 2026 Xolani Sibande"
+    center: "The views expressed on this site are my own and do not necessarily reflect those of my employer."
     right:
       - icon: envelope-fill
         href: mailto:xolaniss@gmail.com
