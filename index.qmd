@@ -3,32 +3,24 @@ title: ""
 page-layout: full
 ---
 
-::: {.hero}
+:::::: hero
 ![](xolani.jpeg){.profile-pic}
 
 # Xolani Sibande
 
-::: {.tagline}
-Economist &middot; Econometrician &middot; Researcher
+::: tagline
+Economist · Researcher
 :::
 
-I'm an economist with over a decade of experience spanning academia, the
-financial sector, and government, currently working on central bank research
-into the impact of monetary and macroprudential policies on the broader
-economy.
+I'm an economist with over a decade of experience spanning academia, the financial sector, and government, currently working on central bank research into the impact of monetary and macroprudential policies on the broader economy.
 
-My core areas of expertise are Econometrics, Macroeconomics, Finance, Data
-Science, and Public Policy.
+My core areas of expertise are Econometrics, Macroeconomics, Finance, Data Science, and Public Policy.
 
-::: {.hero-buttons}
-[About Me](about.qmd){.btn .btn-outline-primary role="button"}
-[Publications](publications.qmd){.btn .btn-outline-primary role="button"}
-[Download CV](CV.pdf){.btn .btn-primary role="button" target="_blank"}
+::: hero-buttons
+[About Me](about.qmd){.btn .btn-outline-primary role="button"} [Publications](publications.qmd){.btn .btn-outline-primary role="button"} [Download CV](CV.pdf){.btn .btn-primary role="button" target="_blank"}
 :::
 
-::: {.social-links}
-[<i class="bi bi-envelope-fill"></i> Email](mailto:xolaniss@gmail.com)
-[<i class="bi bi-linkedin"></i> LinkedIn](https://www.linkedin.com/in/xolanisibande/){target="_blank"}
-[<i class="bi bi-mortarboard-fill"></i> Google Scholar](https://scholar.google.com/citations?user=N4PRIMgAAAAJ&hl=en){target="_blank"}
+::: social-links
+[<i class="bi bi-envelope-fill"></i> Email](mailto:xolaniss@gmail.com) [<i class="bi bi-linkedin"></i> LinkedIn](https://www.linkedin.com/in/xolanisibande/){target="_blank"} [<i class="bi bi-mortarboard-fill"></i> Google Scholar](https://scholar.google.com/citations?user=N4PRIMgAAAAJ&hl=en){target="_blank"}
 :::
-:::
+::::::
