@@ -2,9 +2,9 @@
 title: "Publications"
 ---
 
-A list of my journal articles, books, and reports, organised by year (most
-recent first), followed by working papers currently under review or in
-progress.
+Working papers currently under review or in progress, followed by my
+journal articles, books, and reports, organised by year (most recent
+first).
 
 ```{r}
 #| echo: false
@@ -96,6 +96,14 @@ print_entry <- function(e) {
 published <- Filter(function(x) !x$is_wp, entries)
 working_papers <- Filter(function(x) x$is_wp, entries)
 
+if (length(working_papers) > 0) {
+  cat("\n::: {.pub-year}\nWorking Papers\n:::\n\n")
+  working_papers <- working_papers[order(-vapply(working_papers, function(x) x$year, integer(1)))]
+  cat("\n::: {.pub-list}\n\n")
+  for (e in working_papers) print_entry(e)
+  cat("\n:::\n")
+}
+
 years <- sort(unique(vapply(published, function(x) x$year, integer(1))), decreasing = TRUE)
 
 for (yr in years) {
@@ -106,14 +114,6 @@ for (yr in years) {
 
   cat("\n::: {.pub-list}\n\n")
   for (e in yr_entries) print_entry(e)
-  cat("\n:::\n")
-}
-
-if (length(working_papers) > 0) {
-  cat("\n::: {.pub-year}\nWorking Papers\n:::\n\n")
-  working_papers <- working_papers[order(-vapply(working_papers, function(x) x$year, integer(1)))]
-  cat("\n::: {.pub-list}\n\n")
-  for (e in working_papers) print_entry(e)
   cat("\n:::\n")
 }
 ```
