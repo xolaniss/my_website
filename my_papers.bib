@@ -1,87 +1,122 @@
-@article{babalos2026,
-  title = {Do Investors in Clean Energy {{ETFs}} Herd? {{The}} Role of Climate Risks},
-  shorttitle = {Do Investors in Clean Energy {{ETFs}} Herd?},
-  author = {Babalos, Vassilios and Sibande, Xolani and Bouri, Elie and Gupta, Rangan},
-  year = 2026,
-  journal = {Review of Behavioral Finance},
-  volume = {18},
-  number = {1},
-  pages = {19--32},
-  publisher = {Emerald Publishing Limited},
-  urldate = {2026-09-10},
-  file = {/Users/xolanisibande/Zotero/storage/UEMPYB7C/Babalos et al. - 2026 - Do investors in clean energy ETFs herd The role of climate risks.pdf}
+---
+title: "Publications"
+---
+
+Working papers currently under review or in progress, followed by my
+journal articles, books, and reports, organised by year (most recent
+first).
+
+```{r}
+#| echo: false
+#| results: asis
+#| warning: false
+
+library(bibtex)
+
+clean_title <- function(x) {
+  x <- gsub("\\{\\{|\\}\\}", "", x)
+  x <- gsub("[{}]", "", x)
+  x
 }
 
-@book{blignaut2008,
-  title = {In-Field {{Rainwater Harvesting}} and {{Water Conservation Techniques}}: {{Assessing}} the {{Impact}} of {{Fifteen Years}} of {{WRC-funded Research}} in {{Thaba Nchu}}: {{Report}} to the {{Water Research Commission}}},
-  shorttitle = {In-Field {{Rainwater Harvesting}} and {{Water Conservation Techniques}}},
-  author = {Blignaut, J. N. and Sibande, Xolani},
-  year = 2008,
-  publisher = {Water Research Commission},
-  urldate = {2026-09-10}
+format_authors <- function(author) {
+  nms <- vapply(author, function(p) {
+    given <- paste(p$given, collapse = " ")
+    family <- paste(p$family, collapse = " ")
+    full <- trimws(paste(given, family))
+    if (identical(family, "Sibande") && grepl("Xolani", given)) {
+      full <- paste0("**", full, "**")
+    }
+    full
+  }, character(1))
+  if (length(nms) == 1) return(nms)
+  if (length(nms) == 2) return(paste(nms, collapse = " and "))
+  paste0(paste(nms[-length(nms)], collapse = ", "), ", and ", nms[length(nms)])
 }
 
-@book{cornforth2024,
-  title = {The {{South African NiGEM}} Expansion},
-  author = {Cornforth, Ed and Patel, Urvish and Sibande, Xolani and Morema, Kgotso and Makrelov, Konstantin and Hurst, Ian},
-  year = 2024,
-  publisher = {{Economic Research and Statistics Department, South African Reserve Bank}},
-  urldate = {2026-09-10}
+# Build an SSRN abstract link from a field like "Available at SSRN 6764772"
+ssrn_link <- function(x) {
+  id <- regmatches(x, regexpr("[0-9]+", x))
+  if (length(id) == 0) return(NULL)
+  paste0("https://ssrn.com/abstract=", id)
 }
 
-@book{dejager2022,
-  title = {Leaning against the Wind with Fiscal and Monetary Policy},
-  author = {{de Jager}, Shaun and Loewald, Christopher and Makrelov, Konstantin and Sibande, Xolani},
-  year = 2022,
-  publisher = {{Economic Research and Statistics Department, South African Reserve Bank \dots}},
-  urldate = {2026-09-10}
+bib <- unclass(read.bib("my_papers.bib"))
+
+entries <- lapply(bib, function(e) {
+  a <- attributes(e)
+  journal <- e$journal %||% NULL
+  is_ssrn <- !is.null(journal) && grepl("ssrn", journal, ignore.case = TRUE)
+  is_wp   <- identical(a$bibtype, "TechReport") ||
+             identical(a$bibtype, "Unpublished") ||
+             is_ssrn ||
+             identical(e$institution %||% "", "Working Paper")
+
+  list(
+    bibtype   = a$bibtype,
+    title     = clean_title(e$title %||% ""),
+    author    = format_authors(e$author),
+    year      = suppressWarnings(as.integer(e$year)),
+    journal   = if (is_ssrn) NULL else journal,
+    volume    = e$volume,
+    number    = e$number,
+    pages     = e$pages,
+    publisher = if (!is.null(e$publisher)) clean_title(e$publisher) else NULL,
+    doi       = e$doi,
+    is_wp     = is_wp,
+    ssrn_url  = if (is_ssrn) ssrn_link(journal) else NULL
+  )
+})
+
+print_entry <- function(e) {
+  cat("- ", e$title, ". ", e$author, ". ", sep = "")
+  cat("<span class='pub-venue'>")
+  if (!is.null(e$journal)) {
+    cat("*", e$journal, "*", sep = "")
+    if (!is.null(e$volume)) {
+      cat(", ", e$volume, sep = "")
+      if (!is.null(e$number)) cat("(", e$number, ")", sep = "")
+    }
+    if (!is.null(e$pages)) cat(", ", gsub("--", "-", e$pages), sep = "")
+    cat(". ")
+  } else if (e$is_wp) {
+    cat("Working Paper. ")
+  } else if (!is.null(e$publisher)) {
+    cat(e$publisher, ". ", sep = "")
+  }
+  cat("</span>")
+  if (!is.null(e$doi)) {
+    cat("[https://doi.org/", e$doi, "](https://doi.org/", e$doi, ")", sep = "")
+  } else if (!is.null(e$ssrn_url)) {
+    cat("[Available at SSRN](", e$ssrn_url, ")", sep = "")
+  }
+  cat("\n")
 }
 
-@article{graham2012,
-  title = {Development of a Generic Model to Assess the Costs Associated with Eutrophication},
-  author = {Graham, Mark and Blignaut, James and {de Villiers}, Louis and Mostert, Dirk and Sibande, Xolani and Gebremedhin, Samuel and Harding, William and Rossouw, Nico and Freese, Nico Sue and Ferrer, Stuart},
-  year = 2012,
-  journal = {Water Research Commission},
-  urldate = {2026-09-10}
+published <- Filter(function(x) !x$is_wp, entries)
+working_papers <- Filter(function(x) x$is_wp, entries)
+
+if (length(working_papers) > 0) {
+  cat("\n::: {.pub-year}\nWorking Papers\n:::\n\n")
+  working_papers <- working_papers[order(-vapply(working_papers, function(x) x$year, integer(1)))]
+  cat("\n::: {.pub-list}\n\n")
+  for (e in working_papers) print_entry(e)
+  cat("\n:::\n")
 }
 
-@article{lesame,
-  title = {Inflation {{Dynamics}} and {{Relative PriceDispersion}} in {{South Africa}}: {{Implications forOptimal Inflation Targeting}}},
-  shorttitle = {Inflation {{Dynamics}} and {{Relative PriceDispersion}} in {{South Africa}}},
-  author = {Lesame, Keagile and Sibande, Xolani},
-  journal = {Available at SSRN 6764772},
-  urldate = {2026-09-16},
-  year = 2026
-}
+years <- sort(unique(vapply(published, function(x) x$year, integer(1))), decreasing = TRUE)
 
-@article{plastun2019,
-  title = {Rise and Fall of Calendar Anomalies over a Century},
-  author = {Plastun, Alex and Sibande, Xolani and Gupta, Rangan and Wohar, Mark E.},
-  year = 2019,
-  journal = {The North American Journal of Economics and Finance},
-  volume = {49},
-  pages = {181--205},
-  publisher = {Elsevier},
-  urldate = {2026-09-10},
-  file = {/Users/xolanisibande/Zotero/storage/CQ8X9HVS/Plastun et al. - 2019 - Rise and fall of calendar anomalies over a century.pdf}
-}
+for (yr in years) {
+  cat("\n::: {.pub-year}\n", yr, "\n:::\n\n", sep = "")
+  yr_entries <- Filter(function(x) x$year == yr, published)
+  # Order alphabetically by title within a year
+  yr_entries <- yr_entries[order(vapply(yr_entries, function(x) x$title, character(1)))]
 
-@article{plastun2020,
-  title = {Price Gap Anomaly in the {{US}} Stock Market: {{The}} Whole Story},
-  shorttitle = {Price Gap Anomaly in the {{US}} Stock Market},
-  author = {Plastun, Alex and Sibande, Xolani and Gupta, Rangan and Wohar, Mark E.},
-  year = 2020,
-  journal = {The North American Journal of Economics and Finance},
-  volume = {52},
-  pages = {101177},
-  publisher = {Elsevier},
-  urldate = {2026-09-10}
+  cat("\n::: {.pub-list}\n\n")
+  for (e in yr_entries) print_entry(e)
+  cat("\n:::\n")
 }
-
-@article{plastun2020a,
-  title = {Halloween Effect in Developed Stock Markets: {{A}} Historical Perspective},
-  shorttitle = {Halloween Effect in Developed Stock Markets},
-  author = {Plastun, Alex and Sibande, Xolani and Gupta, Rangan and Wohar, Mark E.},
+```
   year = 2020,
   journal = {International Economics},
   volume = {161},

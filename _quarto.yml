@@ -52,4 +52,5 @@ format:
       body-width: 850px
     smooth-scroll: true
 
-editor: visual
+editor: source
+
