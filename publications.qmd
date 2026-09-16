@@ -2,7 +2,9 @@
 title: "Publications"
 ---
 
-A list of my journal articles, books, and reports, organised by year (most recent first).
+A list of my journal articles, books, and reports, organised by year (most
+recent first), followed by working papers currently under review or in
+progress.
 
 ```{r}
 #| echo: false
@@ -32,53 +34,86 @@ format_authors <- function(author) {
   paste0(paste(nms[-length(nms)], collapse = ", "), ", and ", nms[length(nms)])
 }
 
+# Build an SSRN abstract link from a field like "Available at SSRN 6764772"
+ssrn_link <- function(x) {
+  id <- regmatches(x, regexpr("[0-9]+", x))
+  if (length(id) == 0) return(NULL)
+  paste0("https://ssrn.com/abstract=", id)
+}
+
 bib <- unclass(read.bib("my_papers.bib"))
 
 entries <- lapply(bib, function(e) {
   a <- attributes(e)
+  journal <- e$journal %||% NULL
+  is_ssrn <- !is.null(journal) && grepl("ssrn", journal, ignore.case = TRUE)
+  is_wp   <- identical(a$bibtype, "TechReport") ||
+             identical(a$bibtype, "Unpublished") ||
+             is_ssrn ||
+             identical(e$institution %||% "", "Working Paper")
+
   list(
     bibtype   = a$bibtype,
     title     = clean_title(e$title %||% ""),
     author    = format_authors(e$author),
     year      = suppressWarnings(as.integer(e$year)),
-    journal   = e$journal,
+    journal   = if (is_ssrn) NULL else journal,
     volume    = e$volume,
     number    = e$number,
     pages     = e$pages,
     publisher = if (!is.null(e$publisher)) clean_title(e$publisher) else NULL,
-    doi       = e$doi
+    doi       = e$doi,
+    is_wp     = is_wp,
+    ssrn_url  = if (is_ssrn) ssrn_link(journal) else NULL
   )
 })
 
-years <- sort(unique(vapply(entries, function(x) x$year, integer(1))), decreasing = TRUE)
+print_entry <- function(e) {
+  cat("- ", e$title, ". ", e$author, ". ", sep = "")
+  cat("<span class='pub-venue'>")
+  if (!is.null(e$journal)) {
+    cat("*", e$journal, "*", sep = "")
+    if (!is.null(e$volume)) {
+      cat(", ", e$volume, sep = "")
+      if (!is.null(e$number)) cat("(", e$number, ")", sep = "")
+    }
+    if (!is.null(e$pages)) cat(", ", gsub("--", "-", e$pages), sep = "")
+    cat(". ")
+  } else if (e$is_wp) {
+    cat("Working Paper. ")
+  } else if (!is.null(e$publisher)) {
+    cat(e$publisher, ". ", sep = "")
+  }
+  cat("</span>")
+  if (!is.null(e$doi)) {
+    cat("[https://doi.org/", e$doi, "](https://doi.org/", e$doi, ")", sep = "")
+  } else if (!is.null(e$ssrn_url)) {
+    cat("[Available at SSRN](", e$ssrn_url, ")", sep = "")
+  }
+  cat("\n")
+}
+
+published <- Filter(function(x) !x$is_wp, entries)
+working_papers <- Filter(function(x) x$is_wp, entries)
+
+years <- sort(unique(vapply(published, function(x) x$year, integer(1))), decreasing = TRUE)
 
 for (yr in years) {
   cat("\n::: {.pub-year}\n", yr, "\n:::\n\n", sep = "")
-  yr_entries <- Filter(function(x) x$year == yr, entries)
+  yr_entries <- Filter(function(x) x$year == yr, published)
   # Order alphabetically by title within a year
   yr_entries <- yr_entries[order(vapply(yr_entries, function(x) x$title, character(1)))]
 
   cat("\n::: {.pub-list}\n\n")
-  for (e in yr_entries) {
-    cat("- ", e$title, ". ", e$author, ". ", sep = "")
-    cat("<span class='pub-venue'>")
-    if (!is.null(e$journal)) {
-      cat("*", e$journal, "*", sep = "")
-      if (!is.null(e$volume)) {
-        cat(", ", e$volume, sep = "")
-        if (!is.null(e$number)) cat("(", e$number, ")", sep = "")
-      }
-      if (!is.null(e$pages)) cat(", ", gsub("--", "-", e$pages), sep = "")
-      cat(". ")
-    } else if (!is.null(e$publisher)) {
-      cat(e$publisher, ". ", sep = "")
-    }
-    cat("</span>")
-    if (!is.null(e$doi)) {
-      cat("[https://doi.org/", e$doi, "](https://doi.org/", e$doi, ")", sep = "")
-    }
-    cat("\n")
-  }
+  for (e in yr_entries) print_entry(e)
+  cat("\n:::\n")
+}
+
+if (length(working_papers) > 0) {
+  cat("\n::: {.pub-year}\nWorking Papers\n:::\n\n")
+  working_papers <- working_papers[order(-vapply(working_papers, function(x) x$year, integer(1)))]
+  cat("\n::: {.pub-list}\n\n")
+  for (e in working_papers) print_entry(e)
   cat("\n:::\n")
 }
 ```
